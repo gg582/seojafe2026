@@ -12,7 +12,7 @@ export default async function handler(_req, res) {
   } catch (error) {
     res.status(500).json({
       error: String(error.message || error),
-      hint: 'Playwright package and browser must be available in deployment runtime.'
+      hint: 'Set MELON_COOKIE as fallback, or ensure Playwright package/browser is available in runtime.'
     });
   }
 }
