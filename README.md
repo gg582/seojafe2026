@@ -20,16 +20,29 @@ npm start
 ```
 Open: http://localhost:3000
 
-## GitHub Pages hosting
+## Vercel deployment
 
-This repo includes a Pages deployment workflow (`.github/workflows/pages.yml`) that publishes the `public/` folder.
+This repository now supports Vercel deployment with serverless API routes.
 
-1) GitHub **Environment**: `KAKAO_EMAIL` 생성
-2) 해당 Environment 아래 Secret 추가
+### Required Environment Variables (Vercel Project Settings)
 - `KAKAO_EMAIL`
 - `KAKAO_PW`
-3) GitHub Pages source를 **GitHub Actions**로 설정
-4) `main` push 또는 workflow_dispatch 실행
+
+### Deploy steps
+1. Import this repo into Vercel.
+2. Add `KAKAO_EMAIL`, `KAKAO_PW` in Project → Settings → Environment Variables.
+3. Deploy.
+
+### Routes on Vercel
+- `GET /` → static UI (`public/index.html`)
+- `GET /app.js` → frontend script (`public/app.js`)
+- `POST /api/session/refresh`
+- `GET /api/session/status`
+- `POST /api/check`
+
+## GitHub Pages hosting
+
+GitHub Pages workflow is still included for publishing static files, but Pages itself cannot run server-side Playwright login.
 
 ## 왜 WASM으로도 Pages 한계가 그대로인가?
 
@@ -48,6 +61,4 @@ This repo includes a Pages deployment workflow (`.github/workflows/pages.yml`) t
 
 ## Important
 
-- GitHub Pages는 정적 호스팅입니다. Playwright 로그인/세션 생성은 Pages에서 실행되지 않습니다.
-- 실제 자동 로그인/좌석 API 호출은 `server.js`가 실행되는 Node 환경에서만 동작합니다.
 - 서비스 약관/정책을 준수하고 과도한 요청을 피하세요.
