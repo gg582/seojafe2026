@@ -5,13 +5,14 @@
 1) Install
 ```bash
 npm install
-npx playwright install chromium
 ```
 
 2) Set env
 ```bash
 export KAKAO_EMAIL="your_kakao_email@example.com"
 export KAKAO_PW="your_kakao_password"
+# optional fallback when playwright install is not possible
+# export MELON_COOKIE="PCID=...; JSESSIONID=...; ..."
 ```
 
 3) Run
@@ -22,15 +23,18 @@ Open: http://localhost:3000
 
 ## Vercel deployment
 
-This repository now supports Vercel deployment with serverless API routes.
+This repository supports Vercel deployment with serverless API routes.
 
 ### Required Environment Variables (Vercel Project Settings)
-- `KAKAO_EMAIL`
-- `KAKAO_PW`
+- Primary mode:
+  - `KAKAO_EMAIL`
+  - `KAKAO_PW`
+- Fallback mode (if playwright package cannot be used in runtime):
+  - `MELON_COOKIE`
 
 ### Deploy steps
 1. Import this repo into Vercel.
-2. Add `KAKAO_EMAIL`, `KAKAO_PW` in Project → Settings → Environment Variables.
+2. Add env vars in Project → Settings → Environment Variables.
 3. Deploy.
 
 ### Routes on Vercel

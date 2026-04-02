@@ -23,20 +23,39 @@ function makeCookieHeader(cookies) {
     .join('; ');
 }
 
+
+async function launchBrowser() {
+  try {
+    const { chromium } = await import('playwright');
+    return chromium.launch({ headless: true });
+  } catch (error) {
+    if (process.env.MELON_COOKIE) {
+      return null;
+    }
+    throw new Error(`Playwright module is not available: ${String(error.message || error)}. Set MELON_COOKIE as fallback or install playwright in runtime.`);
+  }
+}
+
 export async function refreshSessionViaPlaywright() {
   const email = process.env.KAKAO_EMAIL;
   const pw = process.env.KAKAO_PW;
 
-  if (!email || !pw) {
-    throw new Error('KAKAO_EMAIL/KAKAO_PW environment variables are required.');
+  if ((!email || !pw) && !process.env.MELON_COOKIE) {
+    throw new Error('KAKAO_EMAIL/KAKAO_PW environment variables are required (or set MELON_COOKIE).');
   }
-
-  const { chromium } = await import('playwright');
 
   const loginUrl = process.env.KAKAO_LOGIN_URL
     || 'https://accounts.kakao.com/login/?continue=https%3A%2F%2Fticket.melon.com%2Fmain%2Findex.htm';
 
-  const browser = await chromium.launch({ headless: true });
+  const browser = await launchBrowser();
+
+  if (!browser && process.env.MELON_COOKIE) {
+    sessionState.cookieHeader = process.env.MELON_COOKIE;
+    sessionState.updatedAt = new Date().toISOString();
+    sessionState.lastError = null;
+    return { ok: true, updatedAt: sessionState.updatedAt, mode: 'env-cookie' };
+  }
+
   const context = await browser.newContext();
   const page = await context.newPage();
 
