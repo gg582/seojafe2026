@@ -7,5 +7,8 @@
     "build": "node --check server.js && node --check public/app.js && node --check api/_lib/melon.js && node --check api/check.js && node --check api/session/refresh.js && node --check api/session/status.js",
     "start": "node server.js",
     "test": "npm run build"
+  },
+  "dependencies": {
+    "playwright": "^1.59.1"
   }
 }

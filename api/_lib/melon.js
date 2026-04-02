@@ -40,7 +40,14 @@ export async function refreshSessionViaPlaywright() {
   const email = process.env.KAKAO_EMAIL;
   const pw = process.env.KAKAO_PW;
 
-  if ((!email || !pw) && !process.env.MELON_COOKIE) {
+  if ((!email || !pw) && process.env.MELON_COOKIE) {
+    sessionState.cookieHeader = process.env.MELON_COOKIE;
+    sessionState.updatedAt = new Date().toISOString();
+    sessionState.lastError = null;
+    return { ok: true, updatedAt: sessionState.updatedAt, mode: 'env-cookie' };
+  }
+
+  if (!email || !pw) {
     throw new Error('KAKAO_EMAIL/KAKAO_PW environment variables are required (or set MELON_COOKIE).');
   }
 
