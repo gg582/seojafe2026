@@ -1,0 +1,57 @@
+name: Deploy Pages
+
+on:
+  push:
+    branches: ["main", "work"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: KAKAO_EMAIL
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Verify required secrets exist
+        env:
+          KAKAO_EMAIL: ${{ secrets.KAKAO_EMAIL }}
+          KAKAO_PW: ${{ secrets.KAKAO_PW }}
+        run: |
+          if [ -z "$KAKAO_EMAIL" ]; then
+            echo "KAKAO_EMAIL secret is missing"
+            exit 1
+          fi
+          if [ -z "$KAKAO_PW" ]; then
+            echo "KAKAO_PW secret is missing"
+            exit 1
+          fi
+          echo "KAKAO_EMAIL/KAKAO_PW secrets detected in environment KAKAO_EMAIL"
+
+      - name: Upload static site artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./public
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

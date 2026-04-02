@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Melon Seat Watcher</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 24px; max-width: 820px; }
+    label { display:block; margin-top: 12px; font-weight: 600; }
+    input { width: 100%; padding: 8px; margin-top: 4px; box-sizing: border-box; }
+    button { margin-top: 14px; margin-right: 8px; padding: 10px 14px; }
+    #status { margin-top: 18px; padding: 10px; background: #f5f5f5; border-radius: 6px; white-space: pre-wrap; }
+    .help { font-size: 14px; color: #444; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Melon 좌석 감시 웹앱</h1>
+  <p>요청 간격을 길게 유지(기본 30초)하고, <code>rmdSeatCnt &gt; 0</code>이면 알림 + 지정 URL을 엽니다.</p>
+  <p class="help">로그인 계정은 서버 환경변수 <code>KAKAO_EMAIL</code>, <code>KAKAO_PW</code> 를 사용합니다.</p>
+
+  <label>prodId <input id="prodId" value="212811" /></label>
+  <label>scheduleNo <input id="scheduleNo" value="100003" /></label>
+  <label>seatId <input id="seatId" value="5_0" /></label>
+  <label>체크 간격(초, 최소 30)
+    <input id="intervalSec" type="number" value="30" min="30" step="1" />
+  </label>
+  <label>좌석 발견 시 열 URL
+    <input id="openUrl" value="https://ticket.melon.com/" />
+  </label>
+
+  <button id="sessionBtn">세션 갱신(카카오 로그인)</button>
+  <button id="startBtn">감시 시작</button>
+  <button id="stopBtn">감시 중지</button>
+
+  <div id="status">대기 중</div>
+
+  <script type="module" src="/app.js"></script>
+</body>
+</html>

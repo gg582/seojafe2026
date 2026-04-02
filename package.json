@@ -1,0 +1,11 @@
+{
+  "name": "melon-seat-watcher",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node --check server.js && node --check public/app.js && node --check api/_lib/melon.js && node --check api/check.js && node --check api/session/refresh.js && node --check api/session/status.js",
+    "start": "node server.js",
+    "test": "npm run build"
+  }
+}
