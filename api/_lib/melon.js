@@ -29,10 +29,20 @@ async function launchBrowser() {
     const { chromium } = await import('playwright');
     return chromium.launch({ headless: true });
   } catch (error) {
+    const message = String(error?.message || error);
+    const missingExecutable = message.includes('Executable doesn\'t exist');
+
     if (process.env.MELON_COOKIE) {
       return null;
     }
-    throw new Error(`Playwright module is not available: ${String(error.message || error)}. Set MELON_COOKIE as fallback or install playwright in runtime.`);
+
+    if (missingExecutable) {
+      throw new Error(
+        'Playwright browser binary is missing. Run "npx playwright install chromium" (or "npx playwright install") in this environment, or set MELON_COOKIE as fallback.'
+      );
+    }
+
+    throw new Error(`Playwright is not available: ${message}. Set MELON_COOKIE as fallback or install playwright + browser in runtime.`);
   }
 }
 

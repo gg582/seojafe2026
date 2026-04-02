@@ -5,6 +5,7 @@
 1) Install
 ```bash
 npm install
+npx playwright install chromium
 ```
 
 2) Set env
